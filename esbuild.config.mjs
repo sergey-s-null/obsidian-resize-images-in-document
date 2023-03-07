@@ -1,8 +1,19 @@
 import esbuild from "esbuild";
-import process from "process";
 import builtins from "builtin-modules";
 import path from "path";
 import {copy} from 'esbuild-plugin-copy';
+import dotenv from "dotenv";
+import fs from "fs";
+
+const envFileName = fs.existsSync(".env.user")
+	? ".env.user"
+	: ".env";
+
+const configOutput = dotenv.config({path: envFileName});
+if (configOutput.error) {
+	console.error(configOutput.error);
+	process.exit(1);
+}
 
 const banner = `
 /*
@@ -14,7 +25,7 @@ if you want to view the source, please visit the github repository of this plugi
 const prod = (process.argv[2] === "production");
 
 const sourceDir = "src";
-const outputDir = "out";
+const outputDir = process.env.OUTPUT_DIR;
 
 const context = await esbuild.context({
 	banner: {
