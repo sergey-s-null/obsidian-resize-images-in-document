@@ -1,6 +1,6 @@
 import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
 import { createContainer } from "./di/createContainer";
-import { SettingsProvider } from "./SettingsProvider";
+import { SettingsProvider } from "./services/SettingsProvider";
 import { TYPES } from "./di/TYPES";
 
 export default class MyPlugin extends Plugin {

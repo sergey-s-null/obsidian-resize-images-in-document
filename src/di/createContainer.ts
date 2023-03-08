@@ -1,6 +1,6 @@
 import { Container } from "inversify";
-import { SettingsProviderImpl } from "../SettingsProviderImpl";
-import { SettingsProvider } from "../SettingsProvider";
+import { SettingsProviderImpl } from "../services/implementations/SettingsProviderImpl";
+import { SettingsProvider } from "../services/SettingsProvider";
 import { TYPES } from "./TYPES";
 import { Plugin } from "obsidian";
 

@@ -1,4 +1,4 @@
-import { PluginSettings } from "./PluginSettings";
+import { PluginSettings } from "../PluginSettings";
 
 export interface SettingsProvider {
 	getSettings(): Promise<PluginSettings>;
