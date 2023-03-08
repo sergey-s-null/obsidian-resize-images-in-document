@@ -2,6 +2,7 @@ import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Set
 import { createContainer } from "./di/createContainer";
 import { SettingsProvider } from "./services/SettingsProvider";
 import { TYPES } from "./di/TYPES";
+import { AskForResizeImagesInFileModal } from "./modals/AskForResizeImagesInFileModal";
 
 export default class MyPlugin extends Plugin {
 	private settingsProvider: SettingsProvider;
@@ -10,10 +11,34 @@ export default class MyPlugin extends Plugin {
 		const container = createContainer(this);
 		this.settingsProvider = container.get<SettingsProvider>(TYPES.SettingsProvider);
 
-		// This creates an icon in the left ribbon.
-		this.addRibbonIcon('dice', 'Sample Plugin', (evt: MouseEvent) => {
-			// Called when the user clicks the icon.
-			new Notice('This is a notice!');
+		this.addRibbonIcon('dice', 'Sample Plugin', async () => {
+			const filePath = this.app.workspace.activeEditor?.file?.path;
+			if (!filePath) {
+				new Notice("Error: Could not get path of current file.");
+				return;
+			}
+
+			const fileContent = this.app.workspace.activeEditor?.editor?.getDoc()?.getValue();
+			if (!fileContent) {
+				new Notice("Current document is empty.");
+				return;
+			}
+
+			const settings = await this.settingsProvider.getSettings();
+
+			new AskForResizeImagesInFileModal(
+				this.app,
+				{
+					filePath: filePath,
+					defaultImageTargetWidth: settings.imageTargetWidth
+				},
+				async values => {
+					settings.imageTargetWidth = values.imageTargetWidth.toString();
+					await this.settingsProvider.saveSettings();
+
+					this.resizeAttachedImages(fileContent);
+				})
+				.open();
 		});
 
 		// This adds a simple command that can be triggered anywhere
@@ -59,6 +84,15 @@ export default class MyPlugin extends Plugin {
 
 	onunload() {
 
+	}
+
+	private resizeAttachedImages(fileContent: string) {
+		throw new Error("Not implemented");// todo
+	}
+
+	private extractAttachmentsPaths(fileContent: string): string[] {
+		const attachmentRegex = /!\[\[([^\[\]]*)]]/g;
+		return [...fileContent.matchAll(attachmentRegex)].map(x => x[1]);
 	}
 }
 
