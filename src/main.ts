@@ -1,8 +1,9 @@
-import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
+import { Editor, MarkdownView, Notice, Plugin } from 'obsidian';
 import { createContainer } from "./di/createContainer";
 import { SettingsProvider } from "./services/SettingsProvider";
 import { TYPES } from "./di/TYPES";
 import { AskForResizeImagesInFileModal } from "./modals/AskForResizeImagesInFileModal";
+import { PluginSettingsTab } from "./settings_tabs/PluginSettingsTab";
 
 export default class MyPlugin extends Plugin {
 	private settingsProvider: SettingsProvider;
@@ -76,8 +77,7 @@ export default class MyPlugin extends Plugin {
 			}
 		});
 
-		// This adds a settings tab so the user can configure various aspects of the plugin
-		this.addSettingTab(new SampleSettingTab(this.app, this, this.settingsProvider));
+		this.addSettingTab(new PluginSettingsTab(this.app, this, this.settingsProvider));
 	}
 
 	onunload() {
@@ -91,36 +91,5 @@ export default class MyPlugin extends Plugin {
 	private extractAttachmentsPaths(fileContent: string): string[] {
 		const attachmentRegex = /!\[\[([^\[\]]*)]]/g;
 		return [...fileContent.matchAll(attachmentRegex)].map(x => x[1]);
-	}
-}
-
-class SampleSettingTab extends PluginSettingTab {
-	private readonly settingsProvider: SettingsProvider;
-
-	constructor(app: App, plugin: Plugin, settingsProvider: SettingsProvider) {
-		super(app, plugin);
-
-		this.settingsProvider = settingsProvider;
-	}
-
-	async display(): Promise<void> {
-		const { containerEl } = this;
-
-		const settings = await this.settingsProvider.getSettings();
-
-		containerEl.empty();
-
-		containerEl.createEl('h2', { text: 'Settings for my awesome plugin.' });
-
-		new Setting(containerEl)
-			.setName("Image target width")
-			.setDesc("Width to which images should be resized")
-			.addText(text => text
-				.setPlaceholder('Enter width')
-				.setValue(settings.imageTargetWidth)
-				.onChange(async (value) => {
-					settings.imageTargetWidth = value;
-					await this.settingsProvider.saveSettings();
-				}));
 	}
 }
