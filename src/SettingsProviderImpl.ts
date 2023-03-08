@@ -3,7 +3,7 @@ import { PluginSettings } from "./PluginSettings";
 import { Plugin } from "obsidian";
 import { DefaultPluginSettings } from "./DefaultPluginSettings";
 import { inject, injectable } from "inversify";
-import { TYPES } from "./TYPES";
+import { TYPES } from "./di/TYPES";
 
 @injectable()
 export class SettingsProviderImpl implements SettingsProvider {
