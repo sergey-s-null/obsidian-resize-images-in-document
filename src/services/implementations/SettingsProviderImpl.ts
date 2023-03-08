@@ -1,7 +1,7 @@
 import { SettingsProvider } from "../SettingsProvider";
-import { PluginSettings } from "../../PluginSettings";
+import { PluginSettings } from "../../entities/PluginSettings";
 import { Plugin } from "obsidian";
-import { DefaultPluginSettings } from "../../DefaultPluginSettings";
+import { DefaultPluginSettings } from "../../entities/DefaultPluginSettings";
 import { inject, injectable } from "inversify";
 import { TYPES } from "../../di/TYPES";
 
