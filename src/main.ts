@@ -1,13 +1,14 @@
 import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
-import { PluginSettings } from "./PluginSettings";
-import { DefaultPluginSettings } from "./DefaultPluginSettings";
-
+import { createContainer } from "./createContainer";
+import { SettingsProvider } from "./SettingsProvider";
+import { TYPES } from "./TYPES";
 
 export default class MyPlugin extends Plugin {
-	settings: PluginSettings;
+	private settingsProvider: SettingsProvider;
 
 	async onload() {
-		await this.loadSettings();
+		const container = createContainer(this);
+		this.settingsProvider = container.get<SettingsProvider>(TYPES.SettingsProvider);
 
 		// This creates an icon in the left ribbon.
 		const ribbonIconEl = this.addRibbonIcon('dice', 'Sample Plugin', (evt: MouseEvent) => {
@@ -59,7 +60,7 @@ export default class MyPlugin extends Plugin {
 		});
 
 		// This adds a settings tab so the user can configure various aspects of the plugin
-		this.addSettingTab(new SampleSettingTab(this.app, this));
+		this.addSettingTab(new SampleSettingTab(this.app, this, this.settingsProvider));
 
 		// If the plugin hooks up any global DOM events (on parts of the app that doesn't belong to this plugin)
 		// Using this function will automatically remove the event listener when this plugin is disabled.
@@ -73,14 +74,6 @@ export default class MyPlugin extends Plugin {
 
 	onunload() {
 
-	}
-
-	async loadSettings() {
-		this.settings = Object.assign({}, DefaultPluginSettings, await this.loadData());
-	}
-
-	async saveSettings() {
-		await this.saveData(this.settings);
 	}
 }
 
@@ -101,15 +94,18 @@ class SampleModal extends Modal {
 }
 
 class SampleSettingTab extends PluginSettingTab {
-	plugin: MyPlugin;
+	private readonly settingsProvider: SettingsProvider;
 
-	constructor(app: App, plugin: MyPlugin) {
+	constructor(app: App, plugin: Plugin, settingsProvider: SettingsProvider) {
 		super(app, plugin);
-		this.plugin = plugin;
+
+		this.settingsProvider = settingsProvider;
 	}
 
-	display(): void {
+	async display(): Promise<void> {
 		const { containerEl } = this;
+
+		const settings = await this.settingsProvider.getSettings();
 
 		containerEl.empty();
 
@@ -120,10 +116,10 @@ class SampleSettingTab extends PluginSettingTab {
 			.setDesc("Width to which images should be resized")
 			.addText(text => text
 				.setPlaceholder('Enter width')
-				.setValue(this.plugin.settings.imageTargetWidth)
+				.setValue(settings.imageTargetWidth)
 				.onChange(async (value) => {
-					this.plugin.settings.imageTargetWidth = value;
-					await this.plugin.saveSettings();
+					settings.imageTargetWidth = value;
+					await this.settingsProvider.saveSettings();
 				}));
 	}
 }
