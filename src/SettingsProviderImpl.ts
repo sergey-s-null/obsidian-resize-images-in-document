@@ -2,14 +2,19 @@ import { SettingsProvider } from "./SettingsProvider";
 import { PluginSettings } from "./PluginSettings";
 import { Plugin } from "obsidian";
 import { DefaultPluginSettings } from "./DefaultPluginSettings";
+import { inject, injectable } from "inversify";
+import { TYPES } from "./TYPES";
 
+@injectable()
 export class SettingsProviderImpl implements SettingsProvider {
 	private readonly plugin: Plugin;
 
 	private settingsLoadingPromise: Promise<PluginSettings> | null;
 	private settings: PluginSettings | null;
 
-	public constructor(plugin: Plugin) {
+	public constructor(
+		@inject(TYPES.Plugin) plugin: Plugin
+	) {
 		this.plugin = plugin;
 
 		this.settingsLoadingPromise = this.loadSettings();
