@@ -1,3 +1,4 @@
 export interface PluginSettings {
-	imageTargetWidth: string
+	imageTargetWidth: string;
+	supportedImageExtensions: string[];
 }
