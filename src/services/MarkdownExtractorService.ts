@@ -1,3 +1,3 @@
 export interface MarkdownExtractorService {
-	extractAttachmentsPaths(markdownContent: string): string[];
+	extractImagesPaths(markdownContent: string): Promise<string[]>;
 }

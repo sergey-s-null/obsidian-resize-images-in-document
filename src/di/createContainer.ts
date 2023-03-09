@@ -5,6 +5,8 @@ import { TYPES } from "./TYPES";
 import { Plugin } from "obsidian";
 import { ImageResizeService } from "../services/ImageResizeService";
 import { ImageResizeServiceImpl } from "../services/implementations/ImageResizeServiceImpl";
+import { MarkdownExtractorService } from "../services/MarkdownExtractorService";
+import { MarkdownExtractorServiceImpl } from "../services/implementations/MarkdownExtractorServiceImpl";
 
 function createContainer(plugin: Plugin): Container {
 	const pluginContainer = new Container();
@@ -16,6 +18,10 @@ function createContainer(plugin: Plugin): Container {
 	pluginContainer
 		.bind<SettingsProvider>(TYPES.SettingsProvider)
 		.to(SettingsProviderImpl)
+		.inSingletonScope();
+	pluginContainer
+		.bind<MarkdownExtractorService>(TYPES.MarkdownExtractorService)
+		.to(MarkdownExtractorServiceImpl)
 		.inSingletonScope();
 	pluginContainer
 		.bind<ImageResizeService>(TYPES.ImageResizeService)
