@@ -47,6 +47,7 @@ export class PluginActionsImpl implements PluginActions {
 
 		const { imageTargetWidth } = await this.settingsProvider.getSettings();
 
+		// todo display files to be resized
 		new AskForResizeImagesInFileModal(
 			this.app,
 			{
