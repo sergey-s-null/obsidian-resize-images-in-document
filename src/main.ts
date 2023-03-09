@@ -1,19 +1,17 @@
 import { Editor, MarkdownView, Notice, Plugin } from 'obsidian';
 import { createContainer } from "./di/createContainer";
-import { SettingsProvider } from "./services/SettingsProvider";
 import { TYPES } from "./di/TYPES";
 import { PluginSettingsTab } from "./settings_tabs/PluginSettingsTab";
 import { PluginSettingsTabFactory } from "./factories/PluginSettingsTabFactory";
+import { PluginActions } from "./services/PluginActions";
 
 export default class MyPlugin extends Plugin {
-	private settingsProvider: SettingsProvider;
-
 	async onload() {
 		const container = createContainer(this.app, this);
-		this.settingsProvider = container.get<SettingsProvider>(TYPES.SettingsProvider);
+		const pluginActions = container.get<PluginActions>(TYPES.PluginActions);
 
 		this.addRibbonIcon('dice', 'Sample Plugin', async () => {
-			// todo call action
+			await pluginActions.resizeImagesInCurrentDocument();
 		});
 
 		// This adds a simple command that can be triggered anywhere
