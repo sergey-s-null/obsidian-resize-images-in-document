@@ -9,6 +9,8 @@ import { MarkdownExtractorService } from "../services/MarkdownExtractorService";
 import { MarkdownExtractorServiceImpl } from "../services/implementations/MarkdownExtractorServiceImpl";
 import { PluginActions } from "../services/PluginActions";
 import { PluginActionsImpl } from "../services/implementations/PluginActionsImpl";
+import { PluginSettingsTab } from "../settings_tabs/PluginSettingsTab";
+import { PluginSettingsTabFactory } from "../factories/PluginSettingsTabFactory";
 
 function createContainer(app: App, plugin: Plugin): Container {
 	const pluginContainer = new Container();
@@ -36,6 +38,18 @@ function createContainer(app: App, plugin: Plugin): Container {
 		.bind<ImageResizeService>(TYPES.ImageResizeService)
 		.to(ImageResizeServiceImpl)
 		.inSingletonScope();
+
+	pluginContainer
+		.bind<PluginSettingsTabFactory>(TYPES.PluginSettingsTabFactory)
+		.toFactory(context => {
+			return () => {
+				return new PluginSettingsTab(
+					context.container.get<App>(TYPES.App),
+					context.container.get<Plugin>(TYPES.Plugin),
+					context.container.get<SettingsProvider>(TYPES.SettingsProvider)
+				);
+			};
+		});
 
 	return pluginContainer;
 }

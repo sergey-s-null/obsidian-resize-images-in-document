@@ -7,6 +7,7 @@ const TYPES = {
 	SettingsProvider: Symbol.for("SettingsProvider"),
 	MarkdownExtractorService: Symbol.for("MarkdownExtractorService"),
 	ImageResizeService: Symbol.for("ImageResizeService"),
+	PluginSettingsTabFactory: Symbol.for("PluginSettingsTabFactory"),
 }
 
 export { TYPES };

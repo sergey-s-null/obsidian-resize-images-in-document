@@ -4,7 +4,11 @@ import { SettingsProvider } from "../services/SettingsProvider";
 export class PluginSettingsTab extends PluginSettingTabBase {
 	private readonly settingsProvider: SettingsProvider;
 
-	public constructor(app: App, plugin: Plugin, settingsProvider: SettingsProvider) {
+	public constructor(
+		app: App,
+		plugin: Plugin,
+		settingsProvider: SettingsProvider
+	) {
 		super(app, plugin);
 
 		this.settingsProvider = settingsProvider;

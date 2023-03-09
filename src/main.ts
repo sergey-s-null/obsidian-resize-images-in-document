@@ -3,6 +3,7 @@ import { createContainer } from "./di/createContainer";
 import { SettingsProvider } from "./services/SettingsProvider";
 import { TYPES } from "./di/TYPES";
 import { PluginSettingsTab } from "./settings_tabs/PluginSettingsTab";
+import { PluginSettingsTabFactory } from "./factories/PluginSettingsTabFactory";
 
 export default class MyPlugin extends Plugin {
 	private settingsProvider: SettingsProvider;
@@ -50,7 +51,9 @@ export default class MyPlugin extends Plugin {
 			}
 		});
 
-		this.addSettingTab(new PluginSettingsTab(this.app, this, this.settingsProvider));
+		const pluginSettingsTabFactory = container.get<PluginSettingsTabFactory>(TYPES.PluginSettingsTabFactory);
+		const pluginSettingsTab = pluginSettingsTabFactory() as PluginSettingsTab;
+		this.addSettingTab(pluginSettingsTab);
 	}
 
 	onunload() {
