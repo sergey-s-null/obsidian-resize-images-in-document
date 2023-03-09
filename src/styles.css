@@ -1,12 +1,48 @@
-/*
+:root {
+	--spacer: 1rem;
+}
 
-This CSS file will be included with your plugin, and
-available in the app when your plugin is enabled.
+/*https://getbootstrap.com/docs/4.0/layout/utilities-for-layout/*/
+/*https://getbootstrap.com/docs/4.0/utilities/spacing/*/
+.m-3 {
+	margin: var(--spacer);
+}
 
-If your plugin does not need CSS, delete this file.
+.mx-3 {
+	margin-left: var(--spacer);
+	margin-right: var(--spacer);
+}
 
-*/
+.my-3 {
+	margin-top: var(--spacer);
+	margin-bottom: var(--spacer);
+}
+
+.ml-3 {
+	margin-left: var(--spacer);
+}
+
+.mr-3 {
+	margin-right: var(--spacer);
+}
+
+.mt-3 {
+	margin-top: var(--spacer);
+}
+
+.mb-3 {
+	margin-bottom: var(--spacer);
+}
 
 .bold-text {
 	font-weight: bold;
+}
+
+.images-list {
+	user-select: text;
+	white-space: pre-line;
+	max-height: 400px;
+	overflow-y: scroll;
+	/*noinspection CssUnresolvedCustomProperty*/
+	border: 1px solid var(--background-modifier-border);
 }

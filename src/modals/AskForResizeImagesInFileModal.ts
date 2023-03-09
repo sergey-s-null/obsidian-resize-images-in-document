@@ -3,6 +3,7 @@ import { App, Modal, Notice, Setting } from "obsidian";
 
 interface ModalInputValues {
 	filePath: string;
+	imagesToBeResized: string[];
 	defaultImageTargetWidth: string;
 }
 
@@ -33,12 +34,23 @@ export class AskForResizeImagesInFileModal extends Modal {
 
 	async onOpen() {
 		const { contentEl } = this;
+		const { filePath, imagesToBeResized } = this.values;
 
 		contentEl.createEl("h3", { text: "Resize all images in current document?" });
+
 		contentEl.createSpan({ text: "Current document path: " });
 		contentEl.createSpan({
-			text: `${this.values.filePath}`,
+			text: `${filePath}`,
 			cls: "bold-text"
+		});
+
+		contentEl.createEl("div", {
+			text: "Images to be resized:",
+			cls: "mt-3"
+		});
+		contentEl.createEl("div", {
+			text: imagesToBeResized.join("\n"),
+			cls: ["images-list", "mb-3"]
 		});
 
 		new Setting(contentEl)
