@@ -1,3 +1,3 @@
 export interface PluginActions {
-	resizeImagesInCurrentDocument(): void;
+	resizeImagesInCurrentDocument(): Promise<void>;
 }
