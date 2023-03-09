@@ -2,7 +2,9 @@ import { ImageResizeService } from "../ImageResizeService";
 import { im } from "../../image_magick/im";
 import { ImageResizeResult } from "../../entities/ImageResizeResult";
 import { ImagesBatchResizeResult } from "../../entities/ImagesBatchResizeResult";
+import { injectable } from "inversify";
 
+@injectable()
 export class ImageResizeServiceImpl implements ImageResizeService {
 	public async resizeBatch(imagePaths: string[], width: number): Promise<ImagesBatchResizeResult> {
 		const promises = imagePaths.map((x => this.resize(x, width)));

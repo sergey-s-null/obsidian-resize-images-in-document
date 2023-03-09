@@ -3,6 +3,8 @@ import { SettingsProviderImpl } from "../services/implementations/SettingsProvid
 import { SettingsProvider } from "../services/SettingsProvider";
 import { TYPES } from "./TYPES";
 import { Plugin } from "obsidian";
+import { ImageResizeService } from "../services/ImageResizeService";
+import { ImageResizeServiceImpl } from "../services/implementations/ImageResizeServiceImpl";
 
 function createContainer(plugin: Plugin): Container {
 	const pluginContainer = new Container();
@@ -14,6 +16,10 @@ function createContainer(plugin: Plugin): Container {
 	pluginContainer
 		.bind<SettingsProvider>(TYPES.SettingsProvider)
 		.to(SettingsProviderImpl)
+		.inSingletonScope();
+	pluginContainer
+		.bind<ImageResizeService>(TYPES.ImageResizeService)
+		.to(ImageResizeServiceImpl)
 		.inSingletonScope();
 
 	return pluginContainer;
