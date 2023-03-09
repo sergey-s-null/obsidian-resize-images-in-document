@@ -8,7 +8,7 @@ export default class MyPlugin extends Plugin {
 	private settingsProvider: SettingsProvider;
 
 	async onload() {
-		const container = createContainer(this);
+		const container = createContainer(this.app, this);
 		this.settingsProvider = container.get<SettingsProvider>(TYPES.SettingsProvider);
 
 		this.addRibbonIcon('dice', 'Sample Plugin', async () => {

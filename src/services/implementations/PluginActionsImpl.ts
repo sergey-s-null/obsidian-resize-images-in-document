@@ -4,12 +4,28 @@ import { AskForResizeImagesInFileModal } from "../../modals/AskForResizeImagesIn
 import { SettingsProvider } from "../SettingsProvider";
 import { MarkdownExtractorService } from "../MarkdownExtractorService";
 import { ImageResizeService } from "../ImageResizeService";
+import { inject, injectable } from "inversify";
+import { TYPES } from "../../di/TYPES";
 
+@injectable()
 export class PluginActionsImpl implements PluginActions {
 	private readonly app: App;
 	private readonly settingsProvider: SettingsProvider;
 	private readonly markdownExtractorService: MarkdownExtractorService;
 	private readonly imageResizeService: ImageResizeService;
+
+	public constructor(
+		@inject(TYPES.App) app: App,
+		@inject(TYPES.SettingsProvider) settingsProvider: SettingsProvider,
+		@inject(TYPES.MarkdownExtractorService) markdownExtractorService: MarkdownExtractorService,
+		@inject(TYPES.ImageResizeService) imageResizeService: ImageResizeService,
+	) {
+		this.app = app;
+		this.settingsProvider = settingsProvider;
+		this.markdownExtractorService = markdownExtractorService;
+		this.imageResizeService = imageResizeService;
+	}
+
 
 	public async resizeImagesInCurrentDocument(): Promise<void> {
 		if (!(this.app.vault.adapter instanceof FileSystemAdapter)) {
