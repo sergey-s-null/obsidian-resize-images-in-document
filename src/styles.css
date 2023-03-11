@@ -46,3 +46,12 @@
 	/*noinspection CssUnresolvedCustomProperty*/
 	border: 1px solid var(--background-modifier-border);
 }
+
+.errors-list {
+	user-select: text;
+	white-space: pre-line;
+	max-height: 300px;
+	overflow-y: scroll;
+	/*noinspection CssUnresolvedCustomProperty*/
+	border: 1px solid var(--background-modifier-border);
+}
