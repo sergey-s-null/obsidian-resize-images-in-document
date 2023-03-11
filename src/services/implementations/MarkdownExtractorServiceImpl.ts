@@ -2,7 +2,7 @@ import { MarkdownExtractorService } from "../MarkdownExtractorService";
 import * as path from "path";
 import { SettingsProvider } from "../SettingsProvider";
 import { inject, injectable } from "inversify";
-import { TYPES } from "../../di/TYPES";
+import { TYPES } from "../../di/types";
 
 @injectable()
 export class MarkdownExtractorServiceImpl implements MarkdownExtractorService {

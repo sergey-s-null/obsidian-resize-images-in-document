@@ -1,7 +1,7 @@
 import { Container } from "inversify";
 import { SettingsProviderImpl } from "../services/implementations/SettingsProviderImpl";
 import { SettingsProvider } from "../services/SettingsProvider";
-import { TYPES } from "./TYPES";
+import { TYPES } from "./types";
 import { App, Plugin } from "obsidian";
 import { ImageResizeService } from "../services/ImageResizeService";
 import { ImageResizeServiceImpl } from "../services/implementations/ImageResizeServiceImpl";

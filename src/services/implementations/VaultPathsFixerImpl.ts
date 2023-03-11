@@ -1,7 +1,7 @@
 import { VaultPathsFixer } from "../VaultPathsFixer";
 import { App, TFile } from "obsidian";
 import { inject, injectable } from "inversify";
-import { TYPES } from "../../di/TYPES";
+import { TYPES } from "../../di/types";
 
 @injectable()
 export class VaultPathsFixerImpl implements VaultPathsFixer {

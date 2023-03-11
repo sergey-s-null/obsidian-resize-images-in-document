@@ -1,6 +1,6 @@
 import { Plugin } from 'obsidian';
 import { createContainer } from "./di/createContainer";
-import { TYPES } from "./di/TYPES";
+import { TYPES } from "./di/types";
 import { PluginSettingsTab } from "./settings_tabs/PluginSettingsTab";
 import { PluginSettingsTabFactory } from "./factories/PluginSettingsTabFactory";
 import { PluginActions } from "./services/PluginActions";

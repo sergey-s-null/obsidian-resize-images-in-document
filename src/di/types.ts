@@ -1,5 +1,4 @@
 import "reflect-metadata";
-// todo rename file in lower case
 
 const TYPES = {
 	App: Symbol.for("App"),

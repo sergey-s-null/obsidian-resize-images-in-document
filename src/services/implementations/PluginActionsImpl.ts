@@ -5,7 +5,7 @@ import { SettingsProvider } from "../SettingsProvider";
 import { MarkdownExtractorService } from "../MarkdownExtractorService";
 import { ImageResizeService } from "../ImageResizeService";
 import { inject, injectable } from "inversify";
-import { TYPES } from "../../di/TYPES";
+import { TYPES } from "../../di/types";
 import { VaultPathsFixer } from "../VaultPathsFixer";
 import { ImagesBatchResizeResult } from "../../entities/ImagesBatchResizeResult";
 import { ResizingResultsModal } from "../../modals/ResizingResultsModal";
