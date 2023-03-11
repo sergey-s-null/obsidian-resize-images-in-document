@@ -23,6 +23,13 @@ export class VaultPathsFixerImpl implements VaultPathsFixer {
 	}
 
 	private fixPath(path: string, vaultFiles: TFile[]) {
+		if (path.startsWith("..")) {
+			path = path.slice(2);
+		}
+		if (path.startsWith("/")) {
+			path = path.slice(1);
+		}
+
 		const matchedVaultFile = vaultFiles.find(x => x.path.endsWith(path));
 		if (!matchedVaultFile) {
 			console.error(`Could not find file in vault by file path: \"${path}\".`);
