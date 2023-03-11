@@ -7,6 +7,8 @@ import { ImageResizeService } from "../ImageResizeService";
 import { inject, injectable } from "inversify";
 import { TYPES } from "../../di/TYPES";
 import { VaultPathsFixer } from "../VaultPathsFixer";
+import { ImagesBatchResizeResult } from "../../entities/ImagesBatchResizeResult";
+import { ResizingResultsModal } from "../../modals/ResizingResultsModal";
 
 @injectable()
 export class PluginActionsImpl implements PluginActions {
@@ -84,8 +86,8 @@ export class PluginActionsImpl implements PluginActions {
 	private async resizeVaultImages(imagesVaultPaths: string[]) {
 		const imagesAbsolutePaths = this.mapToAbsolutePaths(imagesVaultPaths);
 		const targetWidth = await this.getTargetWidth();
-		const results = await this.imageResizeService.resizeBatch(imagesAbsolutePaths, targetWidth);
-		// todo display results
+		const result = await this.imageResizeService.resizeBatch(imagesAbsolutePaths, targetWidth);
+		this.displayResult(result);
 	}
 
 	private mapToAbsolutePaths(vaultPaths: string[]) {
@@ -96,5 +98,13 @@ export class PluginActionsImpl implements PluginActions {
 	private async getTargetWidth() {
 		const { imageTargetWidth } = await this.settingsProvider.getSettings();
 		return Number(imageTargetWidth);
+	}
+
+	private displayResult(result: ImagesBatchResizeResult) {
+		if (result.results.findIndex(x => x.error) == -1) {
+			new Notice(`Successfully resized all (${result.results.length}) images`);
+		} else {
+			new ResizingResultsModal(this.app, { result }).open();
+		}
 	}
 }
