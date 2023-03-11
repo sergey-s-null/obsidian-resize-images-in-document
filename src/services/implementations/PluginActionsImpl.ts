@@ -9,6 +9,7 @@ import { TYPES } from "../../di/types";
 import { VaultPathsFixer } from "../VaultPathsFixer";
 import { ImagesBatchResizeResult } from "../../entities/ImagesBatchResizeResult";
 import { ResizingResultsModal } from "../../modals/ResizingResultsModal";
+import "../../extensions/ArrayExtensions";
 
 @injectable()
 export class PluginActionsImpl implements PluginActions {
