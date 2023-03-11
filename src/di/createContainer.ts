@@ -11,6 +11,8 @@ import { PluginActions } from "../services/PluginActions";
 import { PluginActionsImpl } from "../services/implementations/PluginActionsImpl";
 import { PluginSettingsTab } from "../settings_tabs/PluginSettingsTab";
 import { PluginSettingsTabFactory } from "../factories/PluginSettingsTabFactory";
+import { VaultPathsFixerImpl } from "../services/implementations/VaultPathsFixerImpl";
+import { VaultPathsFixer } from "../services/VaultPathsFixer";
 
 function createContainer(app: App, plugin: Plugin): Container {
 	const pluginContainer = new Container();
@@ -37,6 +39,10 @@ function createContainer(app: App, plugin: Plugin): Container {
 	pluginContainer
 		.bind<ImageResizeService>(TYPES.ImageResizeService)
 		.to(ImageResizeServiceImpl)
+		.inSingletonScope();
+	pluginContainer
+		.bind<VaultPathsFixer>(TYPES.VaultPathsFixer)
+		.to(VaultPathsFixerImpl)
 		.inSingletonScope();
 
 	pluginContainer

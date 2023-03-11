@@ -9,6 +9,7 @@ const TYPES = {
 	MarkdownExtractorService: Symbol.for("MarkdownExtractorService"),
 	ImageResizeService: Symbol.for("ImageResizeService"),
 	PluginSettingsTabFactory: Symbol.for("PluginSettingsTabFactory"),
+	VaultPathsFixer: Symbol.for("VaultPathsFixer"),
 }
 
 export { TYPES };
