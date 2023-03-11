@@ -1,4 +1,4 @@
 export interface ImageResizeResult {
 	imagePath: string;
-	error: Error | null;
+	result: "ok" | "skipped" | Error;
 }

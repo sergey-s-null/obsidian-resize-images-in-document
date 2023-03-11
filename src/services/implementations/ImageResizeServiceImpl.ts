@@ -12,17 +12,39 @@ export class ImageResizeServiceImpl implements ImageResizeService {
 		return { results };
 	}
 
-	public resize(imagePath: string, width: number): Promise<ImageResizeResult> {
-		return new Promise<ImageResizeResult>(resolve => {
+	public async resize(imagePath: string, width: number): Promise<ImageResizeResult> {
+		try {
+			const currentWidth = await this.getWidth(imagePath);
+			if (currentWidth == width) {
+				return { imagePath, result: "skipped" };
+			}
+		} catch (err) {
+			return { imagePath, result: err };
+		}
+
+		return await new Promise<ImageResizeResult>(resolve => {
 			im(imagePath)
 				.resize(width)
 				.write(imagePath, error => {
 					if (error) {
-						resolve({ imagePath, error });
+						resolve({ imagePath, result: error });
 					} else {
-						resolve({ imagePath, error: null });
+						resolve({ imagePath, result: "ok" });
 					}
 				});
+		})
+	}
+
+	private getWidth(imagePath: string) {
+		return new Promise<number>((resolve, reject) => {
+			im(imagePath)
+				.identify((err, value) => {
+					if (err) {
+						reject(err);
+					} else {
+						resolve(value.size.width);
+					}
+				})
 		})
 	}
 }

@@ -25,15 +25,21 @@ export class ResizingResultsModal extends Modal {
 
 		contentEl.createEl("h3", { text: "Resize result" });
 
-		const succeededCount = results.filter(x => !x.error).length;
-		contentEl.createDiv({ text: `Succeeded: ${succeededCount} files of ${results.length}.` });
+		const succeededCount = results.filter(x => x.result == "ok").length;
+		contentEl.createDiv({ text: `Succeeded resized: ${succeededCount} of ${results.length}.` });
 
-		const resultsWithError = results.filter(x => x.error);
-		if (resultsWithError.length > 0) {
-			const failedText = resultsWithError
-				.map(x => `${x.imagePath}: ${x.error!.message}`)
+		const skippedCount = results.filter(x => x.result == "skipped").length;
+		contentEl.createDiv({ text: `Skipped: ${skippedCount} of ${results.length}.` });
+
+		const failedResults = results.filter(x => x.result instanceof Error);
+		if (failedResults.length > 0) {
+			const failedText = failedResults
+				.map(x => `${x.imagePath}: ${(x.result as Error).message}`)
 				.join("\n");
-			contentEl.createDiv({ text: "Failed:", cls: "mt-3" });
+			contentEl.createDiv({
+				text: `Failed (${failedResults.length} of ${results.length}):`,
+				cls: "mt-3"
+			});
 			contentEl.createDiv({ text: failedText, cls: ["errors-list", "mb-3"] });
 		}
 

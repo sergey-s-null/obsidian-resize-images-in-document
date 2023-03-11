@@ -102,8 +102,15 @@ export class PluginActionsImpl implements PluginActions {
 	}
 
 	private displayResult(result: ImagesBatchResizeResult) {
-		if (result.results.findIndex(x => x.error) == -1) {
-			new Notice(`Successfully resized all (${result.results.length}) images`);
+		if (result.results.findIndex(x => x.result instanceof Error) == -1) {
+			const resizedCount = result.results.filter(x => x.result == "ok").length;
+			const skippedCount = result.results.filter(x => x.result == "skipped").length;
+			const totalCount = result.results.length;
+			new Notice(
+				`Resized: ${resizedCount}\n` +
+				`Skipped: ${skippedCount}\n` +
+				`Total: ${totalCount}`
+			);
 		} else {
 			new ResizingResultsModal(this.app, { result }).open();
 		}
