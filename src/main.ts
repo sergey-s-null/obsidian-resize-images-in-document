@@ -5,7 +5,7 @@ import { PluginSettingsTab } from "./settings_tabs/PluginSettingsTab";
 import { PluginSettingsTabFactory } from "./factories/PluginSettingsTabFactory";
 import { PluginActions } from "./services/PluginActions";
 
-export default class MyPlugin extends Plugin {
+export default class ResizeImagesInDocumentPlugin extends Plugin {
 	async onload() {
 		const container = createContainer(this.app, this);
 		const pluginActions = container.get<PluginActions>(TYPES.PluginActions);
