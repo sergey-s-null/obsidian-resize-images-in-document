@@ -10,10 +10,6 @@ export default class MyPlugin extends Plugin {
 		const container = createContainer(this.app, this);
 		const pluginActions = container.get<PluginActions>(TYPES.PluginActions);
 
-		this.addRibbonIcon("bug", "Debug action", async () => {
-			await pluginActions.resizeImagesInCurrentDocument();
-		});
-
 		this.addCommand({
 			id: "resize-images-in-current-document",
 			name: "Resize images in current document",
