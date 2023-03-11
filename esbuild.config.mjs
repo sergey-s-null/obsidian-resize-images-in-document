@@ -73,5 +73,6 @@ if (prod) {
 	await context.rebuild();
 	process.exit(0);
 } else {
+	fs.closeSync(fs.openSync(`${outputDir}/.hotreload`, "w"));
 	await context.watch();
 }
