@@ -6,26 +6,29 @@ import { MarkdownExtractorService } from "../MarkdownExtractorService";
 import { ImageResizeService } from "../ImageResizeService";
 import { inject, injectable } from "inversify";
 import { TYPES } from "../../di/TYPES";
+import { VaultPathsFixer } from "../VaultPathsFixer";
 
 @injectable()
 export class PluginActionsImpl implements PluginActions {
 	private readonly app: App;
 	private readonly settingsProvider: SettingsProvider;
 	private readonly markdownExtractorService: MarkdownExtractorService;
+	private readonly vaultPathsFixer: VaultPathsFixer;
 	private readonly imageResizeService: ImageResizeService;
 
 	public constructor(
 		@inject(TYPES.App) app: App,
 		@inject(TYPES.SettingsProvider) settingsProvider: SettingsProvider,
 		@inject(TYPES.MarkdownExtractorService) markdownExtractorService: MarkdownExtractorService,
+		@inject(TYPES.VaultPathsFixer) vaultPathsFixer: VaultPathsFixer,
 		@inject(TYPES.ImageResizeService) imageResizeService: ImageResizeService,
 	) {
 		this.app = app;
 		this.settingsProvider = settingsProvider;
 		this.markdownExtractorService = markdownExtractorService;
+		this.vaultPathsFixer = vaultPathsFixer;
 		this.imageResizeService = imageResizeService;
 	}
-
 
 	public async resizeImagesInCurrentDocument(): Promise<void> {
 		if (!(this.app.vault.adapter instanceof FileSystemAdapter)) {
@@ -45,21 +48,31 @@ export class PluginActionsImpl implements PluginActions {
 			return;
 		}
 
+		const imagesVaultPaths = await this.extractImagesVaultPaths(fileContent);
+		if (imagesVaultPaths.length == 0) {
+			new Notice("Nothing to resize.");
+			return;
+		}
+
 		const { imageTargetWidth } = await this.settingsProvider.getSettings();
 
-		// todo display files to be resized
 		new AskForResizeImagesInFileModal(
 			this.app,
 			{
 				filePath: filePath,
+				imagesToBeResized: imagesVaultPaths,
 				defaultImageTargetWidth: imageTargetWidth
 			},
 			async values => {
 				await this.saveImageTargetWidth(values.imageTargetWidth);
-
-				await this.resizeAttachedImages(fileContent);
+				await this.resizeVaultImages(imagesVaultPaths);
 			})
 			.open();
+	}
+
+	private async extractImagesVaultPaths(fileContent: string) {
+		const imagesPaths = await this.markdownExtractorService.extractImagesPaths(fileContent);
+		return this.vaultPathsFixer.fixPaths(imagesPaths).distinct();
 	}
 
 	private async saveImageTargetWidth(width: number) {
@@ -68,14 +81,8 @@ export class PluginActionsImpl implements PluginActions {
 		await this.settingsProvider.saveSettings();
 	}
 
-	private async resizeAttachedImages(fileContent: string) {
-		const imagesPaths = await this.markdownExtractorService.extractImagesPaths(fileContent);
-		if (imagesPaths.length == 0) {
-			new Notice("Nothing to resize.");
-			return;
-		}
-
-		const imagesAbsolutePaths = this.mapToAbsolutePaths(imagesPaths);
+	private async resizeVaultImages(imagesVaultPaths: string[]) {
+		const imagesAbsolutePaths = this.mapToAbsolutePaths(imagesVaultPaths);
 		const targetWidth = await this.getTargetWidth();
 		const results = await this.imageResizeService.resizeBatch(imagesAbsolutePaths, targetWidth);
 		// todo display results
